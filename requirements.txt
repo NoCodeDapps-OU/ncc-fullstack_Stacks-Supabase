@@ -1,0 +1,9 @@
+python
+poetry
+crewai 
+langchain 
+openai 
+anthropic 
+python-dotenv 
+langchain-anthropic
+langchain-openai 

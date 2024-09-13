@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "nocc-fullstack"
+version = "0.1.0"
+description = "AI-powered full stack app generator"
+authors = ["nocodeclarity <team@nocodeclarity.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.12"
+crewai = "^0.51.1"
+langchain = "^0.2.16"
+openai = "^1.43.0"
+anthropic = "^0.34.2"
+python-dotenv = "^1.0.1"
+langchain-anthropic = "^0.1.23"
+langchain-openai = "^0.1.23"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
