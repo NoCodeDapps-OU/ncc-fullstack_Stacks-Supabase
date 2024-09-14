@@ -1,5 +1,4 @@
 from crewai import Agent
-from anthropic import Anthropic
 from langchain_anthropic import ChatAnthropic
 
 from .tools import (
@@ -15,7 +14,7 @@ from .tools import (
 )
 
 class SmartContractAgents:
-    def __init__(self, model="claude-3-opus-20240229"):
+    def __init__(self, model="claude-3-sonnet-20240229"):
         self.model = model
         self.llm = ChatAnthropic(model=self.model)
 
@@ -45,7 +44,7 @@ class SmartContractAgents:
         return Agent(
             role='Smart Contract Tester',
             goal='Create comprehensive test suites for Clarity smart contracts',
-            backstory='You are a meticulous QA engineer specializing in blockchain technology and smart contract testing. Your expertise lies in crafting thorough test suites that cover all aspects of Clarity smart contracts, including edge cases and potential vulnerabilities.',
+            backstory='You are a meticulous QA engineer specializing in blockchain technology and smart contract testing.',
             verbose=True,
             allow_delegation=False,
             llm=self.llm,
@@ -90,7 +89,7 @@ class SmartContractAgents:
         )
 
 class FrontendAgents:
-    def __init__(self, model="claude-3-opus-20240229"):
+    def __init__(self, model="claude-3-sonnet-20240229"):
         self.model = model
         self.llm = ChatAnthropic(model=self.model)
 

@@ -69,6 +69,13 @@ class FrontendTools:
 class StacksTools:
     @tool("Integrate Stacks.js")
     def integrate_stacksjs(frontend_code: str) -> str:
+        """Integrates Stacks.js
+        """
+        return integrate_stacksjs(frontend_code)
+    
+class StacksTools:
+    @tool("Integrate Stacks.js")
+    def integrate_stacksjs(frontend_code: str) -> str:
         """Integrates Stacks.js components into the given frontend code."""
         return integrate_stacksjs(frontend_code)
 
@@ -79,6 +86,6 @@ class ContractIntegrationTools:
         return integrate_contract(frontend_code, contract)
 
     @tool("Save Frontend")
-    def save_frontend(project_name: str, html_content: str, css_content: str, js_content: str) -> str:
+    def save_frontend(project_name: str, html_content: str, css_content: str, js_content: str, stacksjs_content: str) -> str:
         """Saves the frontend code to the project directory."""
-        return save_frontend(project_name, html_content, css_content, js_content)
+        return save_frontend(project_name, html_content, css_content, js_content, stacksjs_content)
