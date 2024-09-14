@@ -1,6 +1,7 @@
 import os
 from anthropic import Anthropic
 from dotenv import load_dotenv
+from ..logger import log_step
 
 load_dotenv()
 
@@ -24,8 +25,8 @@ def generate_clarity_contract(requirements: str) -> str:
     """
 
     message = anthropic.messages.create(
-        model="claude-3-opus-20240229",
-        max_tokens=4000,
+        model="claude-3-sonnet-20240229",
+        max_tokens=4096,  
         temperature=0.7,
         messages=[
             {"role": "user", "content": prompt}
@@ -33,10 +34,9 @@ def generate_clarity_contract(requirements: str) -> str:
     )
 
     contract = message.content[0].text.strip()
-    
-    # Remove any markdown code block indicators
     contract = contract.replace("```clarity", "").replace("```", "").strip()
 
+    log_step("Generated Clarity Contract", contract)
     return contract
 
 def generate_clarity_tests(contract: str) -> str:
@@ -58,8 +58,8 @@ def generate_clarity_tests(contract: str) -> str:
     """
 
     message = anthropic.messages.create(
-        model="claude-3-opus-20240229",
-        max_tokens=4000,
+        model="claude-3-sonnet-20240229",
+        max_tokens=4096,  
         temperature=0.7,
         messages=[
             {"role": "user", "content": prompt}
@@ -67,19 +67,22 @@ def generate_clarity_tests(contract: str) -> str:
     )
 
     tests = message.content[0].text.strip()
-    
-    # Remove any markdown code block indicators
     tests = tests.replace("```typescript", "").replace("```", "").strip()
     
+    log_step("Generated Clarity Tests", tests)
     return tests
 
 def validate_clarity_contract(contract: str) -> str:
     # Implement actual validation logic here
-    return "Contract validation successful."
+    validation_result = "Contract validation successful."
+    log_step("Validated Clarity Contract", validation_result)
+    return validation_result
 
 def validate_clarity_tests(tests: str) -> str:
     # Implement actual test validation logic here
-    return "Test validation successful."
+    validation_result = "Test validation successful."
+    log_step("Validated Clarity Tests", validation_result)
+    return validation_result
 
 def setup_project_structure(project_name: str) -> str:
     try:
@@ -87,10 +90,15 @@ def setup_project_structure(project_name: str) -> str:
         os.makedirs(os.path.join(project_name, "contracts"), exist_ok=True)
         os.makedirs(os.path.join(project_name, "tests"), exist_ok=True)
         os.makedirs(os.path.join(project_name, "frontend"), exist_ok=True)
+        os.makedirs(os.path.join(project_name, "logs"), exist_ok=True)
         
-        return f"Project structure for '{project_name}' set up successfully."
+        result = f"Project structure for '{project_name}' set up successfully."
+        log_step("Set Up Project Structure", result)
+        return result
     except Exception as e:
-        return f"Error setting up project structure: {str(e)}"
+        error = f"Error setting up project structure: {str(e)}"
+        log_step("Set Up Project Structure Error", error)
+        return error
 
 def save_contract(project_name: str, contract: str) -> str:
     try:
@@ -98,9 +106,13 @@ def save_contract(project_name: str, contract: str) -> str:
         contract_path = os.path.join(project_name, "contracts", "contract.clar")
         with open(contract_path, "w") as f:
             f.write(contract)
-        return f"Contract saved successfully to {contract_path}"
+        result = f"Contract saved successfully to {contract_path}"
+        log_step("Saved Contract", result)
+        return result
     except Exception as e:
-        return f"Error saving contract: {str(e)}"
+        error = f"Error saving contract: {str(e)}"
+        log_step("Save Contract Error", error)
+        return error
 
 def save_tests(project_name: str, tests: str) -> str:
     try:
@@ -108,6 +120,10 @@ def save_tests(project_name: str, tests: str) -> str:
         tests_path = os.path.join(project_name, "tests", "contract_test.ts")
         with open(tests_path, "w") as f:
             f.write(tests)
-        return f"Tests saved successfully to {tests_path}"
+        result = f"Tests saved successfully to {tests_path}"
+        log_step("Saved Tests", result)
+        return result
     except Exception as e:
-        return f"Error saving tests: {str(e)}"
+        error = f"Error saving tests: {str(e)}"
+        log_step("Save Tests Error", error)
+        return error

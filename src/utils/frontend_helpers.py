@@ -1,12 +1,13 @@
 import os
 from anthropic import Anthropic
 from dotenv import load_dotenv
+from ..logger import log_step
 
 load_dotenv()
 
 anthropic = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-def generate_html_css(requirements: str) -> str:
+def generate_html_css(requirements: str) -> tuple:
     prompt = f"""
     Given the following requirements, generate an HTML structure with Tailwind CSS classes:
 
@@ -27,7 +28,7 @@ def generate_html_css(requirements: str) -> str:
     """
 
     message = anthropic.messages.create(
-        model="claude-3-opus-20240229",
+        model="claude-3-sonnet-20240229",
         max_tokens=4000,
         temperature=0.7,
         messages=[
@@ -37,9 +38,10 @@ def generate_html_css(requirements: str) -> str:
 
     html_content = message.content[0].text.strip()
     html_content = html_content.replace("```html", "").replace("```", "").strip()
-    html_content = message.content[0].text.strip()
     css_content = "/* Tailwind CSS will be loaded from CDN */"
-    return html_content, css_content, message.content[0].text.strip()
+
+    log_step("Generated HTML and CSS", html_content)
+    return html_content, css_content
 
 def generate_javascript(html_structure: str) -> str:
     prompt = f"""
@@ -58,7 +60,7 @@ def generate_javascript(html_structure: str) -> str:
     """
 
     message = anthropic.messages.create(
-        model="claude-3-opus-20240229",
+        model="claude-3-sonnet-20240229",
         max_tokens=4000,
         temperature=0.7,
         messages=[
@@ -67,9 +69,9 @@ def generate_javascript(html_structure: str) -> str:
     )
 
     js_content = message.content[0].text.strip()
-
     js_content = js_content.replace("```javascript", "").replace("```", "").strip()
 
+    log_step("Generated JavaScript", js_content)
     return js_content
 
 def integrate_stacksjs(frontend_code: str) -> str:
@@ -93,7 +95,7 @@ def integrate_stacksjs(frontend_code: str) -> str:
     """
 
     message = anthropic.messages.create(
-        model="claude-3-opus-20240229",
+        model="claude-3-sonnet-20240229",
         max_tokens=4000,
         temperature=0.7,
         messages=[
@@ -102,10 +104,9 @@ def integrate_stacksjs(frontend_code: str) -> str:
     )
 
     js_code = message.content[0].text.strip()
-    
-    # Remove any markdown code block indicators
     js_code = js_code.replace("```javascript", "").replace("```", "").strip()
     
+    log_step("Integrated Stacks.js", js_code)
     return js_code
 
 def integrate_contract(frontend_code: str, contract: str) -> str:
@@ -129,7 +130,7 @@ def integrate_contract(frontend_code: str, contract: str) -> str:
     """
 
     message = anthropic.messages.create(
-        model="claude-3-opus-20240229",
+        model="claude-3-sonnet-20240229",
         max_tokens=4000,
         temperature=0.7,
         messages=[
@@ -138,12 +139,10 @@ def integrate_contract(frontend_code: str, contract: str) -> str:
     )
 
     js_content = message.content[0].text.strip()
-
     js_content = js_content.replace("```javascript", "").replace("```", "").strip()
 
+    log_step("Integrated Contract", js_content)
     return js_content
-
-    return message.content[0].text.strip()
 
 def save_frontend(project_name: str, html_content: str, css_content: str, js_content: str, stacksjs_content: str) -> str:
     try:
@@ -152,7 +151,6 @@ def save_frontend(project_name: str, html_content: str, css_content: str, js_con
         html_path = os.path.join(project_name, "frontend", "index.html")
         with open(html_path, "w") as f:
             f.write(html_content)
-        
         css_path = os.path.join(project_name, "frontend", "styles.css")
         with open(css_path, "w") as f:
             f.write(css_content)
@@ -165,6 +163,10 @@ def save_frontend(project_name: str, html_content: str, css_content: str, js_con
         with open(stacksjs_path, "w") as f:
             f.write(stacksjs_content)
         
-        return f"Frontend code saved successfully to {project_name}/frontend/"
+        result = f"Frontend code saved successfully to {project_name}/frontend/"
+        log_step("Saved Frontend", result)
+        return result
     except Exception as e:
-        return f"Error saving frontend code: {str(e)}"
+        error = f"Error saving frontend code: {str(e)}"
+        log_step("Save Frontend Error", error)
+        return error
