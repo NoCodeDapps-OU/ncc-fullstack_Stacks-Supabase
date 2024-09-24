@@ -15,6 +15,11 @@ from .utils.frontend_helpers import (
     integrate_contract,
     save_frontend
 )
+from .utils.backend_helpers import (
+    setup_supabase,
+    generate_backend_code,
+    save_backend_code
+)
 
 class ClarityProjectSetup:
     @tool("Setup Clarity project structure")
@@ -89,3 +94,19 @@ class ContractIntegrationTools:
     def save_frontend(project_name: str, html_content: str, css_content: str, js_content: str, stacksjs_content: str) -> str:
         """Saves the frontend code to the project directory."""
         return save_frontend(project_name, html_content, css_content, js_content, stacksjs_content)
+    
+class BackendTools:
+    @tool("Setup Supabase")
+    def setup_supabase(project_details: dict) -> str:
+        """Sets up a Supabase project and creates the necessary database structure."""
+        return setup_supabase(project_details)
+
+    @tool("Generate Backend Code")
+    def generate_backend_code(project_details: dict, supabase_setup: str) -> str:
+        """Generates backend code for Supabase integration based on the project details and setup."""
+        return generate_backend_code(project_details, supabase_setup)
+
+    @tool("Save Backend Code")
+    def save_backend_code(project_name: str, backend_code: str) -> str:
+        """Saves the generated backend code to the project directory."""
+        return save_backend_code(project_name, backend_code)
