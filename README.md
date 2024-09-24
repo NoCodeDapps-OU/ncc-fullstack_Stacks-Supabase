@@ -26,16 +26,19 @@ ncc-smartcontract/
 │   ├── init.py
 │   ├── agents.py
 │   ├── crews.py
+│   ├── logger.py
 │   ├── tasks.py
 │   ├── tools.py
 │   ├── prompts/
 │   │   ├── init.py
+│   │   ├── backend_prompts.py
 │   │   ├── contract_prompts.py
 │   │   ├── frontend_prompts.py
 │   │   └── test_prompts.py
 │   └── utils/
 │       ├── init.py
-│       └── clarity_helpers.py
+|       ├── backend_helpers.py
+│       ├── clarity_helpers.py
 │       └── frontend_helpers.py
 ├── tests/
 │   ├── init.py
