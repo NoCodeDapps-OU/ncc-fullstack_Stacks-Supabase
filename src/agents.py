@@ -10,7 +10,8 @@ from .tools import (
     TestValidator,
     FrontendTools,
     StacksTools,
-    ContractIntegrationTools
+    ContractIntegrationTools,
+    BackendTools
 )
 
 class SmartContractAgents:
@@ -135,4 +136,20 @@ class FrontendAgents:
             allow_delegation=False,
             llm=self.llm,
             tools=[ContractIntegrationTools.integrate_contract]
+        )
+    
+class BackendAgents:
+    def __init__(self, model="claude-3-sonnet-20240229"):
+        self.model = model
+        self.llm = ChatAnthropic(model=self.model)
+
+    def supabase_integrator(self):
+        return Agent(
+            role='Supabase Backend Integrator',
+            goal='Design and implement Supabase backend integration',
+            backstory='You are an expert in backend development with extensive experience in Supabase integration.',
+            verbose=True,
+            allow_delegation=False,
+            llm=self.llm,
+            tools=[BackendTools.setup_supabase, BackendTools.generate_backend_code]
         )

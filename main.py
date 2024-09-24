@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
-from src.crews import SmartContractCrews, FrontendCrews
+from src.crews import SmartContractCrews, FrontendCrews, BackendCrews
 from src.logger import log_step
+from src.utils.backend_helpers import save_backend_code
 
 load_dotenv()
 
@@ -18,12 +19,20 @@ def get_user_confirmation(message: str) -> bool:
 def main():
     smart_contract_crews = SmartContractCrews()
     frontend_crews = FrontendCrews()
+    backend_crews = BackendCrews()
 
     # Get user input
-    project_name = input("Enter the name for your Clarity smart contract project: ")
+    project_name = input("Enter the name for your project: ")
     os.environ["PROJECT_NAME"] = project_name
+    project_type = input("Enter the type of project (e.g., NFT marketplace, DeFi app): ")
     contract_requirements = input("Describe the requirements for your smart contract: ")
     frontend_requirements = input("Describe the requirements for your frontend: ")
+
+    project_details = {
+        "project_name": project_name,
+        "project_type": project_type,
+        "frontend_requirements": frontend_requirements
+    }
 
     try:
         # Step 1: Set up the project structure
@@ -74,6 +83,17 @@ def main():
         # Step 8: Integrate Smart Contract with Frontend
         contract_integration_result = frontend_crews.contract_integration_crew(str(stacksjs_result), str(contract_result)).kickoff()
         log_step("Contract Integration", contract_integration_result)
+        if not get_user_confirmation("Do you want to proceed with Supabase backend integration?"):
+            return
+
+        # Step 9: Supabase Backend Integration
+        backend_result = backend_crews.supabase_integration_crew(project_details).kickoff()
+        log_step("Supabase Backend Integration", str(backend_result))
+
+        # Save backend code
+        backend_code = str(backend_result)  # Convert the result to a string
+        save_result = save_backend_code(project_name, backend_code)
+        log_step("Save Backend Code", save_result)
 
         print(f"\nProject completed! All steps have been logged in the '{project_name}/logs/generation_log.txt' file.")
 

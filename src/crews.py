@@ -1,6 +1,6 @@
 from crewai import Crew, Process
-from .agents import SmartContractAgents, FrontendAgents
-from .tasks import SmartContractTasks, FrontendTasks
+from .agents import SmartContractAgents, FrontendAgents, BackendAgents
+from .tasks import SmartContractTasks, FrontendTasks, BackendTasks
 
 class SmartContractCrews:
     def __init__(self):
@@ -106,6 +106,21 @@ class FrontendCrews:
         return Crew(
             agents=[integrator],
             tasks=[integration_task],
+            verbose=True,
+            process=Process.sequential
+        )
+    
+class BackendCrews:
+    def __init__(self):
+        self.agents = BackendAgents()
+
+    def supabase_integration_crew(self, project_details):
+        integrator = self.agents.supabase_integrator()
+        setup_task = BackendTasks.setup_supabase(integrator, project_details)
+        code_task = BackendTasks.generate_backend_code(integrator, project_details, "")
+        return Crew(
+            agents=[integrator],
+            tasks=[setup_task, code_task],
             verbose=True,
             process=Process.sequential
         )

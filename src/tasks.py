@@ -81,3 +81,20 @@ class FrontendTasks:
             agent=agent,
             expected_output="Frontend code updated with smart contract integration, including function calls and event listeners."
         )
+
+class BackendTasks:
+    @staticmethod
+    def setup_supabase(agent, project_details):
+        return Task(
+            description=f"Set up a Supabase project and create the necessary database structure for: {project_details}",
+            agent=agent,
+            expected_output="Detailed instructions for setting up Supabase project and database structure."
+        )
+
+    @staticmethod
+    def generate_backend_code(agent, project_details, supabase_setup):
+        return Task(
+            description=f"Generate backend code for Supabase integration based on the project details: {project_details} and Supabase setup: {supabase_setup}",
+            agent=agent,
+            expected_output="Complete backend code for Supabase integration in JavaScript."
+        )
