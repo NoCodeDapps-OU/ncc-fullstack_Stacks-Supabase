@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from src.crew import SmartContractCrews, FrontendCrews, BackendCrews
+from src.utils.crew import SmartContractCrews, FrontendCrews, BackendCrews
 from src.logger import log_step
 from src.utils.backend_helpers import save_backend_code
 

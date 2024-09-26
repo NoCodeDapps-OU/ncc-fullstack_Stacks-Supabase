@@ -1,6 +1,6 @@
 from crewai import Crew, Process
-from .agents import SmartContractAgents, FrontendAgents, BackendAgents
-from .tasks import SmartContractTasks, FrontendTasks, BackendTasks
+from ..agents import SmartContractAgents, FrontendAgents, BackendAgents
+from ..tasks import SmartContractTasks, FrontendTasks, BackendTasks
 
 class SmartContractCrews:
     def __init__(self):
